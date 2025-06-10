@@ -7,9 +7,15 @@ def relu(x):
     return np.maximum(0, x)
 
 def softmax(x):
-    # Implement the SoftMax function
-    exp_x = np.exp(x - np.max(x, axis=-1, keepdims=True))  # 防止溢出
-    return exp_x / np.sum(exp_x, axis=-1, keepdims=True)
+    # 根據輸入維度動態選擇 axis
+    if x.ndim == 1:
+        # 1D 輸入，沿整個向量運算
+        exp_x = np.exp(x - np.max(x))
+        return exp_x / np.sum(exp_x)
+    else:
+        # 2D 或更高維輸入，沿最後一維 (axis=-1) 運算
+        exp_x = np.exp(x - np.max(x, axis=-1, keepdims=True))
+        return exp_x / np.sum(exp_x, axis=-1, keepdims=True)
 
 # === Flatten ===
 def flatten(x):
